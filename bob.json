@@ -1,1 +1,10 @@
-{"username":"bob","name":"ohad","id":46802,"answers":[{"quizname":"food","answers":[1,2,3,2,3]},{"quizname":"movies","answers":[1,1,1,2,3]}],"food":[{"username":"bestfriend1","answers":[1,2,1,2,3]}]}
+{
+  "username": "bob",
+  "name": "ohad",
+  "id": 46802,
+  "answers": [
+    { "quizname": "food", "answers": [1, 2, 3, 2, 3] },
+    { "quizname": "movies", "answers": [1, 1, 1, 2, 3] }
+  ],
+  "food": [{ "username": "bestfriend1", "answers": [1, 2, 1, 2, 3] }]
+}

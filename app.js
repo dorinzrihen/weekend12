@@ -124,7 +124,7 @@ app.post("/quiz/:username/create", function (req, res) {
     });
   }
   else{
-    console.log("somwthing wrong");
+    console.log("something wrong");
   }
 });
 
