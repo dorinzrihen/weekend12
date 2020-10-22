@@ -3,5 +3,6 @@
   "name": "name and last name 1234",
   "password": "123456745",
   "answers": [{ "quizname": "food", "answers": "[1,3,4,5]" }],
+  "friendsAnswer": [{ "username": "bestfriend1", "answers": "[1,3,4,5]" }],
   "id": 92530
 }

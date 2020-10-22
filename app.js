@@ -25,27 +25,7 @@ app.post("/quiz/results/:username/:quizname/answer", (req, res) => {
     username: req.body.username,
     answers: req.body.answers,
   };
-
-  const usernamePath = `./${req.params.username}.json`;
-  console.log(usernamePath);
-
-  //if the path is correct update the new answer
-  if (fs.existsSync(usernamePath)) {
-    const usernameSelector = require(`./${req.params.username}.json`);
-    usernameSelector[req.params.quizname]
-      ? usernameSelector[req.params.quizname].push(answer)
-      : (usernameSelector[req.params.quizname] = [answer]);
-    fs.writeFile(usernamePath, JSON.stringify(usernameSelector), function (
-      err
-    ) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log("The file was Updated");
-    });
-  } else {
-    console.log("Ops, cant find the file");
-  }
+  util.updateFriendAnswer(answer,req.params.username) ? res.json({update:'user Updated'}) : res.json({error:'user Already exsit'});
 });
 
 //quiz score
@@ -86,6 +66,7 @@ app.post("/", function (req, res) {
     name: req.body.name,
     password: req.body.password,
     answers: [],
+    friendsAnswer:[],
     id: Math.floor(Math.random() * 99999) + 100,
   };
   util.createNewUser(newMember)? res.json({update:'user Updated'}) : res.json({error:'user Already exsit'});

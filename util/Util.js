@@ -46,5 +46,22 @@ const updateUserQuiz = (quiz, username) => {
   return true;
 };
 
+const updateFriendAnswer = (answers, username) => {
+  if (!checkIfUserExist(username)) {
+    return false;
+  }
+  let newQuizAnswer = JSON.stringify(answers);
+  fs.readFile(getUserPath(username), function (err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    const updatedData = JSON.parse(data.toString());
+    updatedData.friendsAnswer.push(JSON.parse(newQuizAnswer))
+    fs.writeFileSync(getUserPath(username), JSON.stringify(updatedData));
+  });
+  return true;
+};
+
 exports.updateUserQuiz = updateUserQuiz;
 exports.createNewUser = createNewUser;
+exports.updateFriendAnswer = updateFriendAnswer;
