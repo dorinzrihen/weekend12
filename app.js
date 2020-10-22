@@ -79,7 +79,7 @@ app.get(
   }
 );
 
-//add new quiz username
+//add new user profile 
 app.post("/", function (req, res) {
   const newMember = {
     username: req.body.username,
@@ -88,7 +88,7 @@ app.post("/", function (req, res) {
     answers: [],
     id: Math.floor(Math.random() * 99999) + 100,
   };
-  util.updateFileWithNewUser(newMember)? res.json({update:'userUpdated'}) : res.json({error:'user Already exsit'});
+  util.createNewUser(newMember)? res.json({update:'user Updated'}) : res.json({error:'user Already exsit'});
 });
 
 //create new quiz and update profile
@@ -98,21 +98,7 @@ app.post("/quiz/:username/create", function (req, res) {
     answers: req.body.answers,
   };
 
-  const usernamePath = `./${req.params.username}.json`;
-  if (fs.existsSync(usernamePath)) {
-    const usernameSelector = require(`./${req.params.username}.json`);
-    usernameSelector.answers.push(quiz);
-    fs.writeFile(usernamePath, JSON.stringify(usernameSelector), function (
-      err
-    ) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log("The file update");
-    });
-  } else {
-    console.log("something wrong");
-  }
+  util.updateUserQuiz(quiz,req.params.username)? res.json({update:'user Updated'}) : res.json({error:'user not exsit'});
 });
 
 app.listen(port, () => {
