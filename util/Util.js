@@ -56,12 +56,42 @@ const updateFriendAnswer = (answers, username) => {
       return console.log(err);
     }
     const updatedData = JSON.parse(data.toString());
-    updatedData.friendsAnswer.push(JSON.parse(newQuizAnswer))
+    updatedData.friendsAnswer.push(JSON.parse(newQuizAnswer));
     fs.writeFileSync(getUserPath(username), JSON.stringify(updatedData));
   });
   return true;
 };
 
+const getQuizScoreByFriend = (user, quizname , friendUser, res) => {
+  let friendscore = 0;
+  if (!checkIfUserExist(user)) {
+    return res.json ({msg:"error"});
+  }
+  fs.readFile(getUserPath(user), function (err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    const accInfo = JSON.parse(data);
+    const userAnswer = accInfo.answers.find(quiz =>{
+      return quiz.quizname === quizname
+    })
+    const friendAnswer = accInfo.friendsAnswer.find(quiz => {
+      return quiz.quizname === quizname && quiz.username === friendUser;
+    })
+    //count score 
+    for(let i = 0; i< userAnswer.answers.length; i++){
+      if (userAnswer.answers[i] ===friendAnswer.answers[i] ) {
+        friendscore +=1;
+      }
+    }
+    
+    res.json ({score: friendscore , questionLen:userAnswer.answers.length});
+
+  });
+
+};
+
 exports.updateUserQuiz = updateUserQuiz;
 exports.createNewUser = createNewUser;
 exports.updateFriendAnswer = updateFriendAnswer;
+exports.getQuizScoreByFriend = getQuizScoreByFriend;

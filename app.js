@@ -22,54 +22,41 @@ app.get("/quiz/results/:username", (req, res) => {
 //quiz answer by friend
 app.post("/quiz/results/:username/:quizname/answer", (req, res) => {
   const answer = {
+    quizname: req.params.quizname,
     username: req.body.username,
     answers: req.body.answers,
   };
-  util.updateFriendAnswer(answer,req.params.username) ? res.json({update:'user Updated'}) : res.json({error:'user Already exsit'});
+  util.updateFriendAnswer(answer, req.params.username)
+    ? res.json({ update: "user Updated" })
+    : res.json({ error: "user Already exsit" });
 });
 
 //quiz score
 app.get(
   "/quiz/results/:username/:quizname/summary/:friendanswer",
   (req, res) => {
-    const usernameSelector = require(`./${req.params.username}.json`);
-    let score = 0;
-    let friendAnswer = [];
-    let userAnswer = [];
-    let spesificFriendAnswer = usernameSelector[req.params.quizname];
-    for (const value in spesificFriendAnswer) {
-      if (spesificFriendAnswer[value].username === req.params.friendanswer) {
-        friendAnswer = spesificFriendAnswer[value].answers;
-      }
-    }
-
-    for (const value in usernameSelector.answers) {
-      if (usernameSelector.answers[value].quizname === req.params.quizname) {
-        userAnswer = usernameSelector.answers[value].answers;
-      }
-    }
-
-    for (const answer in userAnswer) {
-      if (userAnswer[answer] === friendAnswer[answer]) {
-        score += 1;
-      }
-    }
-
-    res.json({ msg: `score ${score}/${userAnswer.length}` });
+    return util.getQuizScoreByFriend(
+      req.params.username,
+      req.params.quizname,
+      req.params.friendanswer,
+      res
+    )
   }
 );
 
-//add new user profile 
+//add new user profile
 app.post("/", function (req, res) {
   const newMember = {
     username: req.body.username,
     name: req.body.name,
     password: req.body.password,
     answers: [],
-    friendsAnswer:[],
+    friendsAnswer: [],
     id: Math.floor(Math.random() * 99999) + 100,
   };
-  util.createNewUser(newMember)? res.json({update:'user Updated'}) : res.json({error:'user Already exsit'});
+  util.createNewUser(newMember)
+    ? res.json({ update: "user Updated" })
+    : res.json({ error: "user Already exsit" });
 });
 
 //create new quiz and update profile
@@ -79,7 +66,9 @@ app.post("/quiz/:username/create", function (req, res) {
     answers: req.body.answers,
   };
 
-  util.updateUserQuiz(quiz,req.params.username)? res.json({update:'user Updated'}) : res.json({error:'user not exsit'});
+  util.updateUserQuiz(quiz, req.params.username)
+    ? res.json({ update: "user Updated" })
+    : res.json({ error: "user not exsit" });
 });
 
 app.listen(port, () => {
